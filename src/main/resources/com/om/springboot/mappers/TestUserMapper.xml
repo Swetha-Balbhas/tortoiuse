@@ -1,0 +1,25 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.TestUserMapper">
+
+    <resultMap id="TestUserResultMap" type="com.om.springboot.model.TestUser">
+        <id column="EMAILID" property="emailId" />
+        <result column="PASSWORD" property="password" />
+        <result column="FIRSTNAME" property="firstName" />
+        <result column="LASTNAME" property="lastName" />
+    </resultMap>
+
+    <select id="findAllTest" resultMap="TestUserResultMap">
+        SELECT EMAILID,PASSWORD,FIRSTNAME,LASTNAME FROM TESTUSER
+    </select>
+
+    <select id="findUserById" resultMap="TestUserResultMap">
+        SELECT EMAILID,PASSWORD,FIRSTNAME,LASTNAME FROM TESTUSER WHERE EMAILID=#{emailId}
+    </select>
+
+    <insert id="insertTestUser" parameterType="com.om.springboot.model.TestUser" useGeneratedKeys="true" keyProperty="emailId">
+        INSERT INTO TESTUSER(EMAILID,PASSWORD,FIRSTNAME,LASTNAME) VALUES(#{emailId},#{password},#{firstName},#{lastName})
+    </insert>
+</mapper>

@@ -1,0 +1,63 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.resourcemanager.OtpMapper">
+
+    <resultMap id="OtpResultMap" type="com.om.springboot.model.resourcemanager.Otp">
+        <id column="ID" property="id"/>
+        <result column="EMAIL" property="email"/>
+        <result column="OTP" property="otp"/>
+        <result column="CREATED_ON" property="createdAt"/>
+        <result column="RESENT_ON" property="resentAt"/>
+        <result column="RESENT_COUNT" property="resentCount"/>
+    </resultMap>
+
+
+    <select id="findByEmail" resultType="boolean">
+        SELECT ID,EMAIL,OTP,CREATED_ON,RESENT_ON,RESENT_COUNT FROM OTP WHERE EMAIL=#{email}
+    </select>
+
+    <select id="getOtpByEmail" resultMap="OtpResultMap">
+        SELECT ID,EMAIL,OTP,CREATED_ON,RESENT_ON,RESENT_COUNT FROM OTP WHERE EMAIL=#{email}
+    </select>
+
+    <select id="findByEmailAndOtp" resultType="boolean">
+        SELECT ID as "id",
+        EMAIL as "email",
+        OTP as "otp",
+        CREATED_ON as "createdAt" ,
+        RESENT_ON as "resentAt",
+        RESENT_COUNT as "resentCount" FROM OTP WHERE EMAIL=#{email} and OTP=#{otp}
+    </select>
+
+    <select id="findByEmailAndOtpTimeout" resultType="boolean">
+        SELECT ID as "id",
+        EMAIL as "email",
+        OTP as "otp",
+        CREATED_ON as "createdAt" ,
+        RESENT_ON as "resentAt",
+        RESENT_COUNT as "resentCount" FROM OTP WHERE EMAIL=#{email} and OTP=#{otp}
+        AND
+        CREATED_ON > date_sub(now(), interval 5 minute);
+    </select>
+
+    <insert id="insertOtp" parameterType="com.om.springboot.model.resourcemanager.Otp">
+        INSERT INTO OTP (
+        ID,EMAIL,OTP,CREATED_ON,RESENT_ON,RESENT_COUNT
+        )
+        VALUES (
+        #{id},#{email},#{otp},#{createdAt},#{resentAt},#{resentCount}
+        );
+    </insert>
+
+    <update id="updateOtp" parameterType="com.om.springboot.model.resourcemanager.Otp">
+        UPDATE OTP SET ID = #{id},
+        EMAIL=#{email},
+        OTP = #{otp},
+        CREATED_ON = #{createdAt},
+        RESENT_ON = #{resentAt},
+        RESENT_COUNT = #{resentCount} WHERE ID = #{id}
+    </update>
+
+</mapper>

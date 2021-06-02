@@ -1,0 +1,102 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.resourcemanager.OpportunityMapper">
+
+    <resultMap id="OpportunityResultMap" type="com.om.springboot.model.resourcemanager.Opportunity">
+        <id column="ID" property="id"/>
+        <result column="TOKEN" property="token"/>
+        <result column="ROLE" property="role"/>
+        <result column="DEPARTMENT" property="department"/>
+        <result column="JOB_DESCRIPTION" property="jobDescription"/>
+        <result column="POSITIONS" property="positions"/>
+        <result column="SKILLS" property="skills"/>
+        <result column="LOCATION" property="location"/>
+        <result column="EXPERIENCE" property="experience"/>
+        <result column="STATUS" property="status"/>
+        <result column="APPLICATION_COUNT" property="applicationCount"/>
+        <result column="CREATED_ON" property="createdAt"/>
+    </resultMap>
+
+    <insert id="insertOpportunities" parameterType="com.om.springboot.model.resourcemanager.Opportunity">
+        INSERT INTO OPPORTUNITY
+        (ID,TOKEN, ROLE,DEPARTMENT,JOB_DESCRIPTION,POSITIONS,SKILLS, LOCATION, EXPERIENCE, STATUS,APPLICATION_COUNT, CREATED_ON)
+        VALUES
+        ( #{id}, #{token},  #{role}, #{department}, #{jobDescription}, #{positions}, #{skills}, #{location}, #{experience},
+         #{status}, #{applicationCount}, #{createdAt}
+        );
+    </insert>
+
+    <select id="getMaxToken" resultType="Long">
+        SELECT MAX(TOKEN)
+        FROM
+        OPPORTUNITY
+    </select>
+
+    <select id="getAllOpportunityDetails" resultMap="OpportunityResultMap">
+        SELECT ID,TOKEN, ROLE,DEPARTMENT,JOB_DESCRIPTION,POSITIONS,SKILLS, LOCATION, EXPERIENCE, STATUS,APPLICATION_COUNT, CREATED_ON
+        FROM
+        OPPORTUNITY
+        ORDER BY FIELD(STATUS, 'open','close'), TOKEN
+        DESC
+    </select>
+
+    <update id="updateJobOpportunityByToken" parameterType="com.om.springboot.model.resourcemanager.Opportunity">
+        UPDATE OPPORTUNITY
+        SET
+        ROLE = #{role},
+        DEPARTMENT = #{department},
+        JOB_DESCRIPTION = #{jobDescription},
+        POSITIONS= #{positions},
+        SKILLS= #{skills},
+        LOCATION= #{location},
+        EXPERIENCE = #{experience},
+        STATUS = #{status}
+        where
+        token= #{token}
+    </update>
+
+    <update id="updateStatusByToken" parameterType="com.om.springboot.model.resourcemanager.Opportunity">
+        UPDATE OPPORTUNITY
+        SET
+        STATUS = #{status}
+        where
+        token= #{token}
+    </update>
+
+    <select id="findByToken" resultType="Boolean">
+        SELECT ID,TOKEN, ROLE,DEPARTMENT,JOB_DESCRIPTION,POSITIONS,SKILLS, LOCATION, EXPERIENCE, STATUS,APPLICATION_COUNT, CREATED_ON
+        FROM
+        OPPORTUNITY
+        where
+        TOKEN = #{token}
+    </select>
+
+    <select id="getOpenedJobOpportunities" resultMap="OpportunityResultMap">
+        SELECT ID,TOKEN, ROLE,DEPARTMENT,JOB_DESCRIPTION,POSITIONS,SKILLS, LOCATION, EXPERIENCE, STATUS,APPLICATION_COUNT, CREATED_ON
+        FROM
+        OPPORTUNITY
+        where
+        STATUS = 'Open'
+        ORDER BY
+        CREATED_ON
+        DESC
+    </select>
+
+    <select id="getJobOpeningByToken" resultMap="OpportunityResultMap">
+        SELECT ID,TOKEN, ROLE,DEPARTMENT,JOB_DESCRIPTION,POSITIONS,SKILLS, LOCATION, EXPERIENCE, STATUS,APPLICATION_COUNT, CREATED_ON
+        FROM
+        OPPORTUNITY
+        where
+        TOKEN = #{token}
+    </select>
+
+    <update id="updateApplicationReceivedByToken" parameterType="com.om.springboot.model.resourcemanager.Opportunity">
+      UPDATE OPPORTUNITY
+        SET APPLICATION_COUNT = #{applicationCount}
+        where
+        TOKEN= #{token}
+    </update>
+
+</mapper>

@@ -1,0 +1,24 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.TestMapper">
+
+    <resultMap id="TestResultMap" type="com.om.springboot.dto.Test">
+        <id column="id" property="id" />
+        <result column="testid" property="testid" />
+        <result column="testname" property="testname" />
+    </resultMap>
+
+    <select id="findAllTest" resultMap="TestResultMap">
+        SELECT ID, TESTID, TESTNAME FROM TEST
+    </select>
+
+    <select id="findTestById" resultMap="TestResultMap">
+        SELECT ID, TESTID, TESTNAME FROM TEST WHERE ID=#{id}
+    </select>
+
+    <insert id="insertTest" parameterType="com.om.springboot.dto.Test" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO TEST(TESTID,TESTNAME) VALUES(#{TESTID},#{TESTNAME})
+    </insert>
+</mapper>

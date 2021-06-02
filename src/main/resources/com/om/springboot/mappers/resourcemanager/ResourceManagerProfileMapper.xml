@@ -1,0 +1,57 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.resourcemanager.ResourceManagerProfileMapper">
+
+    <resultMap id="ResourceManagerProfileResultMap" type="com.om.springboot.model.resourcemanager.ResourceManagerProfile">
+        <id column="ID" property="id"/>
+        <result column="EMAIL" property="email"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="ROLE_ID" property="roleId"/>
+    </resultMap>
+
+
+    <select id="findByEmailAndRoleId" resultType="Boolean">
+        SELECT ID, EMAIL, PASSWORD, ROLE_ID
+        FROM
+        RESOURCE_MANAGER_PROFILE
+        WHERE
+        EMAIL = #{email}
+        AND
+        ROLE_ID =#{roleId}
+    </select>
+
+    <select id="findByEmail" resultType="Boolean">
+        SELECT ID, EMAIL, PASSWORD, ROLE_ID
+        FROM
+        RESOURCE_MANAGER_PROFILE
+        WHERE
+        EMAIL = #{email}
+    </select>
+
+    <select id="getProfileByEmail" resultMap="ResourceManagerProfileResultMap">
+        SELECT ID, EMAIL, PASSWORD, ROLE_ID
+        FROM
+        RESOURCE_MANAGER_PROFILE
+        WHERE
+        EMAIL = #{email}
+    </select>
+
+    <select id="getProfileById" resultMap="ResourceManagerProfileResultMap">
+        SELECT ID, EMAIL, PASSWORD, ROLE_ID
+        FROM
+        RESOURCE_MANAGER_PROFILE
+        WHERE
+        ID = #{id}
+    </select>
+
+    <update id="updatePasswordByEmail" parameterType="com.om.springboot.model.resourcemanager.ResourceManagerProfile">
+        UPDATE RESOURCE_MANAGER_PROFILE
+        SET
+        PASSWORD = #{password}
+        where
+        EMAIL = #{email}
+    </update>
+
+</mapper>

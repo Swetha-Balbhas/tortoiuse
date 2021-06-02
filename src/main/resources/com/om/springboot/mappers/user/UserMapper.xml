@@ -1,0 +1,35 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.om.springboot.mappers.user.UserMapper">
+
+    <resultMap id="UserResultMap" type="com.om.springboot.model.user.User">
+        <id column="ID" property="id" />
+        <result column="NAME" property="name" />
+        <result column="USERNAME" property="username" />
+        <result column="EMAIL" property="email" />
+        <result column="PASSWORD" property="password" />
+    </resultMap>
+
+
+    <select id="findByUsername" resultType="boolean">
+        SELECT ID,NAME,USERNAME,EMAIL,PASSWORD FROM USER WHERE USERNAME=#{username}
+    </select>
+
+    <select id="findByEmail" resultType="boolean">
+        SELECT ID,NAME,USERNAME,EMAIL,PASSWORD FROM USER WHERE EMAIL=#{email}
+    </select>
+
+    <select id="getUserByEmail" resultMap="UserResultMap">
+        SELECT ID,NAME,USERNAME,EMAIL,PASSWORD FROM USER WHERE EMAIL=#{email}
+    </select>
+
+    <insert id="insertUser" parameterType="com.om.springboot.model.user.User">
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
+            SELECT LAST_INSERT_ID() AS value
+        </selectKey>
+        INSERT INTO USER VALUES (#{id},#{name},#{username},#{email},#{password});
+    </insert>
+
+</mapper>
